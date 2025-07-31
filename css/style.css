@@ -39,7 +39,7 @@ h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); }
 /* --- HEADER --- */
 .header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 25px 0; transition: all 0.4s ease; }
 .header.scrolled { background-color: rgba(18, 18, 18, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--secondary-dark); }
-/* .header.is-page { position: sticky; background-color: var(--primary-dark); } */
+.header.is-page { position: sticky; background-color: var(--primary-dark); }
 .header-container { display: flex; justify-content: space-between; align-items: center; }
 .logo { font-family: var(--font-heading); font-size: 1.75rem; font-weight: 800; text-decoration: none; color: var(--text-light); }
 .main-nav ul { display: flex; align-items: center; list-style: none; gap: 40px; }
@@ -73,7 +73,7 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 
 /* --- FEATURED LISTINGS & BLOG --- */
 .featured-listings, .blog-highlights { padding: 100px 0; }
-.listings-grid, .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+.listings-grid, .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 .listing-card, .blog-card { display: block; text-decoration: none; color: var(--text-light); background-color: var(--primary-dark); border-radius: 12px; overflow: hidden; transition: transform 0.4s ease; }
 .listing-card:hover, .blog-card:hover { transform: translateY(-10px); }
 .listing-image, .blog-card-image { height: 280px; background-size: cover; background-position: center; position: relative; }
