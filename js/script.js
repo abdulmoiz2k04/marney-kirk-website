@@ -14,61 +14,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 ease: "power2.inOut",
                 onComplete: () => {
                     preloader.style.display = 'none';
-                    // Start hero animation after preloader is gone
-                    animateHero();
+                    document.body.classList.remove('no-scroll'); // Allow scrolling
+                    // Start all page content animations after preloader is gone
+                    animatePageContent();
                 }
             });
         });
+        document.body.classList.add('no-scroll'); // Prevent scrolling during preload
     } else {
-        // If no preloader, animate hero right away
-        animateHero();
+        // If no preloader, animate everything right away
+        animatePageContent();
     }
 
-    // --- STICKY HEADER ---
+    // --- STICKY HEADER (FIXED LOGIC) ---
     const header = document.querySelector('.header');
     if (header) {
+        // This is the corrected, stable method. It uses GSAP's built-in toggleClass
+        // to add/remove the 'scrolled' class without flickering.
         ScrollTrigger.create({
-            start: 'top -100px',
-            onUpdate: self => {
-                if (self.direction === 1 && self.progress > 0) { // Scrolling down
-                    header.classList.add('scrolled');
-                } else { // Scrolling up
-                    header.classList.remove('scrolled');
-                }
-            }
+            trigger: "body", // The trigger is the body itself
+            start: "top -100px", // Add the class when the user has scrolled 100px down
+            end: "bottom bottom", // A dummy end point
+            toggleClass: {
+                targets: header,
+                className: "scrolled"
+            },
         });
     }
 
-    // --- HERO ANIMATION FUNCTION ---
-    function animateHero() {
-        if (!document.querySelector('.hero')) return; // Only run on homepage
-        
-        const tl = gsap.timeline({delay: 0.2});
-        tl.from('.hero-headline', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' })
-          .from('.hero-subheadline', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' }, "-=0.8")
-          .from('.hero-choice-wrapper', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' }, "-=0.8")
-          .from('.hero-image', { duration: 1.2, scale: 0.9, opacity: 0, ease: 'power3.out' }, "-=0.8");
-    }
+    // --- PAGE CONTENT ANIMATION FUNCTION (UPDATED) ---
+    function animatePageContent() {
+        // Animate Hero Section if it exists
+        if (document.querySelector('.hero')) {
+            const tl = gsap.timeline({delay: 0.2});
+            tl.from('.hero-headline', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' })
+              .from('.hero-subheadline', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' }, "-=0.8")
+              .from('.hero-choice-wrapper', { duration: 1, y: 50, opacity: 0, ease: 'power3.out' }, "-=0.8")
+              .from('.hero-image', { duration: 1.2, scale: 0.9, opacity: 0, ease: 'power3.out' }, "-=0.8");
+        }
 
-    // --- GENERAL REVEAL ANIMATION (THE FIX) ---
-    // This is the corrected logic. It works reliably.
-    const revealElements = document.querySelectorAll('.anim-reveal');
-    revealElements.forEach(el => {
-        gsap.fromTo(el, 
-            { opacity: 0, y: 50 }, // from state
-            { // to state
-                opacity: 1, 
-                y: 0,
-                duration: 1, 
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: el,
-                    start: 'top 85%',
-                    toggleActions: 'play none none none',
-                }
-            }
-        );
-    });
+        // Animate all other reveal elements on the page with a stagger effect on load
+        const revealElements = document.querySelectorAll('.anim-reveal');
+        gsap.from(revealElements, {
+            delay: document.querySelector('.hero') ? 0.5 : 0.2, // Add a slight delay if there's a hero section
+            duration: 1,
+            y: 60,
+            opacity: 0,
+            ease: 'power3.out',
+            stagger: 0.15 // Stagger the animation of each element for a smooth cascade effect
+        });
+    }
 
     // --- VALUATION FORM ---
     const valuationForm = document.getElementById('valuation-form');
@@ -78,32 +73,16 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentStep = 0;
 
         const goToStep = (stepIndex) => {
-            if (stepIndex >= steps.length || stepIndex < 0) return;
-
-            const current = steps[currentStep];
-            const next = steps[stepIndex];
-
-            gsap.to(current, { 
-                opacity: 0, 
-                duration: 0.3, 
-                onComplete: () => {
-                    current.classList.remove('active');
-                    next.classList.add('active');
-                    gsap.fromTo(next, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 });
-                }
-            });
-            currentStep = stepIndex;
+            gsap.to(steps[currentStep], { opacity: 0, duration: 0.3, onComplete: () => {
+                steps[currentStep].classList.remove('active');
+                steps[stepIndex].classList.add('active');
+                gsap.fromTo(steps[stepIndex], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 });
+                currentStep = stepIndex;
+            }});
         };
 
         nextButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Simple validation for demo
-                const input = steps[currentStep].querySelector('input[required]');
-                if (input && !input.value) {
-                    input.style.border = '1px solid red';
-                    return;
-                }
-                if(input) input.style.border = '1px solid #333';
                 goToStep(currentStep + 1);
             });
         });
@@ -119,7 +98,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainNav = document.querySelector('.main-nav');
     if (mobileNavToggle && mainNav) {
         mobileNavToggle.addEventListener('click', () => {
+            mobileNavToggle.classList.toggle('open');
             mainNav.classList.toggle('open');
+            document.body.classList.toggle('no-scroll'); // Prevent background scroll when menu is open
         });
     }
 

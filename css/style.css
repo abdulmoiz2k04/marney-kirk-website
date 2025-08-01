@@ -24,13 +24,17 @@ body {
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
 }
+/* ADDED: Body class to prevent scroll when menu is open */
+body.no-scroll {
+    overflow: hidden;
+}
 .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
 h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
 h1 { font-size: clamp(2.8rem, 6vw, 5rem); }
 h2 { font-size: clamp(2.2rem, 5vw, 3.5rem); }
 h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); }
 .section-title { text-align: center; margin-bottom: 4rem; }
-.page-main { padding-top: 120px; } /* Increased padding for safety */
+.page-main { padding-top: 100px; } 
 
 /* --- PRELOADER --- */
 .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dark-bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
@@ -46,7 +50,7 @@ h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); }
 .main-nav a { text-decoration: none; font-weight: 500; color: var(--text-muted); transition: color 0.3s; }
 .main-nav a:hover { color: var(--text-light); }
 .btn-header-cta { display: block; }
-.mobile-nav-toggle { display: none; background: none; border: none; cursor: pointer; }
+.mobile-nav-toggle { display: none; z-index: 1001; } /* Ensure toggle is above nav */
 
 /* --- BUTTONS & FORMS --- */
 .btn { display: inline-block; padding: 16px 36px; border-radius: 50px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; border: 2px solid transparent; cursor: pointer; }
@@ -57,7 +61,7 @@ h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); }
 input, select, textarea { width: 100%; padding: 16px; background-color: var(--secondary-dark); border: 1px solid #333; border-radius: 8px; color: var(--text-light); font-family: var(--font-body); font-size: 1rem; }
 
 /* --- HERO SECTION --- */
-.hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 60px; overflow: hidden; }
+.hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 60px; }
 .hero-container { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 2rem; }
 .hero-headline { margin-bottom: 1.5rem; }
 .hero-subheadline { font-size: 1.25rem; color: var(--text-muted); max-width: 550px; margin-bottom: 3rem; }
@@ -68,12 +72,18 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 .choice-card i { color: var(--accent); }
 .hero-image-container { position: relative; }
 .hero-image-bg { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(229,184,11,0.1) 0%, rgba(229,184,11,0) 60%); transform: translate(-50%, -50%); }
-.hero-image { position: relative; z-index: 2; max-width: 500px; width: 100%; border-radius: 50%; }
-.about-image { border-radius: 50%; }
+.hero-image { position: relative; z-index: 2; max-width: 500px; width: 100%; }
 
-/* --- FEATURED LISTINGS & BLOG --- */
+/* --- FEATURED LISTINGS & BLOG (FIXED) --- */
 .featured-listings, .blog-highlights { padding: 100px 0; }
-.listings-grid, .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.listings-grid, .blog-grid { 
+    display: grid; 
+    /* CHANGED: Adjusted minmax for better responsiveness */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 2rem; 
+    /* ADDED: Ensures grid items are centered within the container */
+    justify-content: center;
+}
 .listing-card, .blog-card { display: block; text-decoration: none; color: var(--text-light); background-color: var(--primary-dark); border-radius: 12px; overflow: hidden; transition: transform 0.4s ease; }
 .listing-card:hover, .blog-card:hover { transform: translateY(-10px); }
 .listing-image, .blog-card-image { height: 280px; background-size: cover; background-position: center; position: relative; }
@@ -102,7 +112,6 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 .footer-main { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; padding-bottom: 40px; border-bottom: 1px solid var(--secondary-dark); }
 .footer-col h4 { margin-bottom: 1rem; }
 .footer-col ul { list-style: none; }
-.footer-col li { margin-bottom: 0.5rem; }
 .footer-col a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
 .footer-col a:hover { color: var(--text-light); }
 .footer-brokerage-logo { height: 30px; margin-top: 1rem; opacity: 0.7; }
@@ -113,9 +122,8 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 .page-title { margin-bottom: 1rem; }
 .page-subtitle { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 .listings-page-section, .blog-page-section, .contact-section { padding: 80px 0; }
-.listings-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
-.listings-filters input, .listings-filters select { flex-grow: 1; }
-.page-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+.listings-filters { display: flex; gap: 1rem; margin-bottom: 3rem; }
+.page-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .about-section { padding: 80px 0; }
 .about-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; }
 .about-image img { width: 100%; border-radius: 12px; }
@@ -141,7 +149,7 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 
 /* --- VALUATION PAGE --- */
 .valuation-section { min-height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center; }
-.valuation-container { max-width: 800px; width: 100%; padding: 2rem; }
+.valuation-container { max-width: 800px; width: 100%; }
 .valuation-form .valuation-step { display: none; text-align: center; }
 .valuation-form .valuation-step.active { display: block; }
 .valuation-title { margin-bottom: 1rem; }
@@ -152,17 +160,55 @@ input, select, textarea { width: 100%; padding: 16px; background-color: var(--se
 /* --- RESPONSIVE STYLES --- */
 @media (max-width: 992px) {
     .btn-header-cta { display: none; }
-    .main-nav { display: none; }
-    .mobile-nav-toggle { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; z-index: 1001; }
-    .hamburger-bar { width: 28px; height: 2px; background-color: var(--text-light); transition: all 0.3s ease; }
-    .main-nav.active {
-        display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--primary-dark); flex-direction: column; justify-content: center; align-items: center;
-        transform: translateX(100%); transition: transform 0.4s ease;
+    .main-nav { 
+        display: flex;
+        position: fixed;
+        top: 0;
+        right: -100%; /* Start off-screen */
+        width: 100%;
+        max-width: 400px;
+        height: 100vh;
+        background-color: var(--primary-dark);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.5s ease;
+        z-index: 1000;
     }
-    .main-nav.active.open { transform: translateX(0); }
-    .main-nav.active ul { flex-direction: column; gap: 2rem; }
-    .main-nav.active a { font-size: 1.5rem; color: var(--text-light); }
+    .main-nav.open {
+        right: 0; /* Slide in */
+    }
+    .main-nav ul {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .main-nav a {
+        font-size: 1.5rem;
+        color: var(--text-light);
+    }
+    .mobile-nav-toggle { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 6px; 
+        background: none; 
+        border: none; 
+        cursor: pointer; 
+        z-index: 1001; /* Must be higher than the nav */
+    }
+    .hamburger-bar { 
+        width: 28px; 
+        height: 2px; 
+        background-color: var(--text-light); 
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+    /* Hamburger to X animation */
+    .mobile-nav-toggle.open .hamburger-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .mobile-nav-toggle.open .hamburger-bar:nth-child(2) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
 
     .hero-container { grid-template-columns: 1fr; text-align: center; }
     .hero-image-container { order: -1; margin-bottom: 2rem; }
